@@ -1,23 +1,20 @@
 import pygame
+import random
 
 LARGURA = 600
 ALTURA = 385
 
-g = 25.807
+g = 0
 
 aceleracao_x = 0
 aceleracao_y = 0
 
 posx_mario = 0
-posy_mario = 238
+posy_mario = 0
 
-posx_cano = 300
-posy_cano = 205
-vcano = -10
-
-posx_canolongo = 800
-posy_canolongo = 58
-vcanolongo = -10
+posx_canolongo = 0
+posy_canolongo = 0
+vcanolongo = 0
 
 tempo = pygame.time.Clock()
 
@@ -29,11 +26,34 @@ pygame.mixer.music.load('toque.mp3')
 
 mario = pygame.image.load('mario.png')
 fundo = pygame.image.load('backfundo.png')
-cano = pygame.image.load('cano.png')
 canolongo = pygame.image.load('canolongo.png')
 
 window = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption('Mario fake')
+
+def init_game():
+    global g
+    g = 25.807
+    
+    global aceleracao_x
+    global aceleracao_y
+    aceleracao_x = 0
+    aceleracao_y = 0
+
+    global posx_mario
+    global posy_mario
+    posx_mario = 0
+    posy_mario = 238
+    
+    global posx_canolongo
+    global posy_canolongo
+    global vcanolongo
+    posx_canolongo = 800
+    posy_canolongo = 58
+    vcanolongo = -10
+
+    global tempo
+    tempo = pygame.time.Clock()
 
 
 def texto(msg, cor, tam, x, y):
@@ -42,16 +62,10 @@ def texto(msg, cor, tam, x, y):
     window.blit(texto1, (x, y))
 
 
-window_opened = True
-pygame.mixer.music.play(-1)
-while window_opened:
-    pygame.time.delay(50)
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            window_opened = False
-
-    comando = pygame.key.get_pressed()
+def movimentos(comando):
+    global posx_mario
+    global posy_mario
+    global aceleracao_y
     if comando[pygame.K_RIGHT] and posx_mario <= 510:
         posx_mario += 15
         mario = pygame.image.load('mario.png')
@@ -68,10 +82,19 @@ while window_opened:
         aceleracao_y -= 27
         posy_mario += aceleracao_y
 
-    if posx_cano > -50:
-        posx_cano += vcano
-    else:
-        posx_cano = 900
+
+init_game()
+
+window_opened = True
+pygame.mixer.music.play(-1)
+while window_opened:
+    pygame.time.delay(50)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            window_opened = False
+
+    movimentos(pygame.key.get_pressed())
 
     if posx_canolongo > -50:
         posx_canolongo += vcanolongo
@@ -90,20 +113,6 @@ while window_opened:
         aceleracao_y = 0
         tempo = pygame.time.Clock()
 
-    if (posx_mario + 40 > posx_cano) and (posy_mario + 40 > posy_cano):
-        posx_mario = 0
-        window.blit(fundo, (0, 0))
-        texto('Morreu playboy', (255, 140, 0), 50, 150, 100)
-        pygame.display.update()
-        pygame.time.delay(3000)
-        posx_mario = 0
-        posy_mario = 238
-        posx_cano = 300
-        posy_cano = 205
-        posx_canolongo = 800
-        posy_canolongo = 58
-
-
     if (posx_mario + 40 > posx_canolongo) and (posy_mario + 40 > posy_canolongo):
         posx_mario = 0
         window.blit(fundo, (0, 0))
@@ -112,14 +121,11 @@ while window_opened:
         pygame.time.delay(3000)
         posx_mario = 0
         posy_mario = 238
-        posx_cano = 300
-        posy_cano = 205
         posx_canolongo = 800
         posy_canolongo = 58
 
     window.blit(fundo, (0, 0))
     mario_w = window.blit(mario, (posx_mario, posy_mario))
-    cano_w = window.blit(cano, (posx_cano, posy_cano))
     canolongo_w = window.blit(canolongo, (posx_canolongo, posy_canolongo))
     pygame.display.update()
     tempo.tick(1000)
