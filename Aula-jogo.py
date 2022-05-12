@@ -56,6 +56,20 @@ def init_game():
     tempo = pygame.time.Clock()
 
 
+def colisao():
+    global posx_mario
+    global posy_mario
+    global posx_canolongo
+    global posy_canolongo
+
+    if (posx_mario + 40 > posx_canolongo) and (posy_mario + 50 > posy_canolongo) and (posx_mario < posx_canolongo + 40):
+        posx_mario = 0
+        window.blit(fundo, (0, 0))
+        texto('Morreu playboy', (255, 140, 0), 50, 150, 100)
+        pygame.display.update()
+        pygame.time.delay(3000)
+        init_game()
+
 def texto(msg, cor, tam, x, y):
     font = pygame.font.SysFont(None, tam)
     texto1 = font.render(msg, True, cor)
@@ -66,6 +80,7 @@ def movimentos(comando):
     global posx_mario
     global posy_mario
     global aceleracao_y
+    global mario
     if comando[pygame.K_RIGHT] and posx_mario <= 510:
         posx_mario += 15
         mario = pygame.image.load('mario.png')
@@ -101,6 +116,8 @@ while window_opened:
     else:
         posx_canolongo = 900
 
+
+
     window.fill((0, 0, 0))
 
     T = tempo.get_time() / 1000
@@ -113,16 +130,7 @@ while window_opened:
         aceleracao_y = 0
         tempo = pygame.time.Clock()
 
-    if (posx_mario + 40 > posx_canolongo) and (posy_mario + 40 > posy_canolongo):
-        posx_mario = 0
-        window.blit(fundo, (0, 0))
-        texto('Morreu playboy', (255, 140, 0), 50, 150, 100)
-        pygame.display.update()
-        pygame.time.delay(3000)
-        posx_mario = 0
-        posy_mario = 238
-        posx_canolongo = 800
-        posy_canolongo = 58
+    colisao()
 
     window.blit(fundo, (0, 0))
     mario_w = window.blit(mario, (posx_mario, posy_mario))
