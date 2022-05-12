@@ -6,7 +6,7 @@ ALTURA = 385
 
 g = 0
 
-aceleracao_x = 0
+velocidade_y = 0
 aceleracao_y = 0
 
 posx_mario = 0
@@ -31,13 +31,20 @@ canolongo = pygame.image.load('canolongo.png')
 window = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption('Mario fake')
 
+
+def texto(msg, cor, tam, x, y):
+    font = pygame.font.SysFont(None, tam)
+    texto1 = font.render(msg, True, cor)
+    window.blit(texto1, (x, y))
+
+
 def init_game():
     global g
     g = 25.807
     
-    global aceleracao_x
+    global velocidade_y
     global aceleracao_y
-    aceleracao_x = 0
+    velocidade_y = 0
     aceleracao_y = 0
 
     global posx_mario
@@ -70,15 +77,11 @@ def colisao():
         pygame.time.delay(3000)
         init_game()
 
-def texto(msg, cor, tam, x, y):
-    font = pygame.font.SysFont(None, tam)
-    texto1 = font.render(msg, True, cor)
-    window.blit(texto1, (x, y))
-
 
 def movimentos(comando):
     global posx_mario
     global posy_mario
+    global velocidade_y
     global aceleracao_y
     global mario
     if comando[pygame.K_RIGHT] and posx_mario <= 510:
@@ -94,8 +97,8 @@ def movimentos(comando):
         posx_mario -= 20
         mario = pygame.image.load('mario-left.png')
     if comando[pygame.K_UP] and posy_mario == 238:
-        aceleracao_y -= 27
-        posy_mario += aceleracao_y
+        velocidade_y -= 27
+        posy_mario += velocidade_y
 
 
 init_game()
@@ -116,17 +119,15 @@ while window_opened:
     else:
         posx_canolongo = 900
 
-
-
     window.fill((0, 0, 0))
 
-    T = tempo.get_time() / 1000
-    f = g * T
-    aceleracao_y += f
-    posy_mario += aceleracao_y
+    aceleracao_y += g/100
+    velocidade_y += aceleracao_y
+    posy_mario += velocidade_y
 
     if posy_mario > 238:
         posy_mario = 238
+        velocidade_y = 0
         aceleracao_y = 0
         tempo = pygame.time.Clock()
 
