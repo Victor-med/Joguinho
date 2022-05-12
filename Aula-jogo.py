@@ -21,12 +21,7 @@ vcanolongo = -10
 
 tempo = pygame.time.Clock()
 
-tempos = 0
-vpulo = -12.5
-altura_mario = posy_mario
-
 pygame.font.init()
-FONTE = pygame.font.SysFont('arial', 50)
 
 pygame.init()
 
@@ -39,6 +34,13 @@ canolongo = pygame.image.load('canolongo.png')
 
 window = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption('Mario fake')
+
+
+def texto(msg, cor, tam, x, y):
+    font = pygame.font.SysFont(None, tam)
+    texto1 = font.render(msg, True, cor)
+    window.blit(texto1, (x, y))
+
 
 window_opened = True
 pygame.mixer.music.play(-1)
@@ -63,7 +65,7 @@ while window_opened:
         posx_mario -= 20
         mario = pygame.image.load('mario-left.png')
     if comando[pygame.K_UP] and posy_mario == 238:
-        aceleracao_y = -27
+        aceleracao_y -= 27
         posy_mario += aceleracao_y
 
     if posx_cano > -50:
@@ -88,14 +90,34 @@ while window_opened:
         aceleracao_y = 0
         tempo = pygame.time.Clock()
 
-    if (posx_mario + 50 > posx_cano) and (posy_mario + 50 > posy_cano):
+    if (posx_mario + 40 > posx_cano) and (posy_mario + 40 > posy_cano):
         posx_mario = 0
-
-    if (posx_mario + 50 > posx_canolongo) and (posy_mario + 50 > posy_canolongo):
+        window.blit(fundo, (0, 0))
+        texto('Morreu playboy', (255, 140, 0), 50, 150, 100)
+        pygame.display.update()
+        pygame.time.delay(3000)
         posx_mario = 0
+        posy_mario = 238
+        posx_cano = 300
+        posy_cano = 205
+        posx_canolongo = 800
+        posy_canolongo = 58
 
 
-    window.blit(fundo, (0,0))
+    if (posx_mario + 40 > posx_canolongo) and (posy_mario + 40 > posy_canolongo):
+        posx_mario = 0
+        window.blit(fundo, (0, 0))
+        texto('Morreu playboy', (255, 140, 0), 50, 150, 100)
+        pygame.display.update()
+        pygame.time.delay(3000)
+        posx_mario = 0
+        posy_mario = 238
+        posx_cano = 300
+        posy_cano = 205
+        posx_canolongo = 800
+        posy_canolongo = 58
+
+    window.blit(fundo, (0, 0))
     mario_w = window.blit(mario, (posx_mario, posy_mario))
     cano_w = window.blit(cano, (posx_cano, posy_cano))
     canolongo_w = window.blit(canolongo, (posx_canolongo, posy_canolongo))
