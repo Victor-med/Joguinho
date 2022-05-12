@@ -77,6 +77,14 @@ def colisao():
         pygame.time.delay(3000)
         init_game()
 
+    if (posx_mario < posx_canolongo + 110) and (posy_mario + 50 > posy_canolongo) and (posx_mario + 40 > posx_canolongo):
+        posx_mario = 0
+        window.blit(fundo, (0, 0))
+        texto('Morreu playboy', (255, 140, 0), 50, 150, 100)
+        pygame.display.update()
+        pygame.time.delay(3000)
+        init_game()
+
 
 def movimentos(comando):
     global posx_mario
@@ -97,7 +105,7 @@ def movimentos(comando):
         posx_mario -= 20
         mario = pygame.image.load('mario-left.png')
     if comando[pygame.K_UP] and posy_mario == 238:
-        velocidade_y -= 27
+        velocidade_y -= 32
         posy_mario += velocidade_y
 
 
